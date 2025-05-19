@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notification Clicker</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        overflow: hidden;
-        position: relative;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notification Clicker</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      overflow: hidden;
+      position: relative;
+    }
+    .notification {
+      position: absolute;
+      width: 250px;
+      padding: 10px;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      z-index: 1000;
+    }
+    .notif-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .notif-header button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .notif-content {
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+<script>
+function createNotification(x, y) {
+  console.log('Creating notification at', x, y);
+  const notif = document.createElement('div');
+  notif.className = 'notification';
+  notif.style.left = `${x}px`;
+  notif.style.top = `${y}px`;
+
+  const header = document.createElement('div');
+  header.className = 'notif-header';
+
+  const title = document.createElement('span');
+  title.textContent = 'New Notification';
+
+  const controls = document.createElement('div');
+  ['–', 'x'].forEach(label => {
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      for (let i = 0; i < 3; i++) {
+        const offsetX = Math.random() * window.innerWidth;
+        const offsetY = Math.random() * window.innerHeight;
+        createNotification(offsetX, offsetY);
       }
+    };
+    controls.appendChild(btn);
+  });
 
-      .notification {
-        position: absolute;
-        width: 250px;
-        padding: 10px;
-        background: #fff;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        border-radius: 5px;
-        z-index: 1000;
-      }
+  header.appendChild(title);
+  header.appendChild(controls);
 
-      .notif-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 5px;
-      }
+  const content = document.createElement('div');
+  content.className = 'notif-content';
+  content.textContent = 'You have a new message!';
 
-      .notif-header button {
-        border: none;
-        background: none;
-        cursor: pointer;
-        font-size: 14px;
-      }
+  notif.appendChild(header);
+  notif.appendChild(content);
+  notif.onclick = (e) => {
+    e.stopPropagation();
+    for (let i = 0; i < 3; i++) {
+      const offsetX = Math.random() * window.innerWidth;
+      const offsetY = Math.random() * window.innerHeight;
+      createNotification(offsetX, offsetY);
+    }
+  };
 
-      .notif-content {
-        font-size: 14px;
-        color: #333;
-      }
-    </style>
-  </head>
-  <body>
+  document.body.appendChild(notif);
+}
 
-    <script>
-      function createNotification(x, y) {
-        const notif = document.createElement('div');
-        notif.className = 'notification';
-        notif.style.left = `${x}px`;
-        notif.style.top = `${y}px`;
+document.body.addEventListener('click', (e) => {
+  createNotification(e.clientX, e.clientY);
+});
 
-        const header = document.createElement('div');
-        header.className = 'notif-header';
+window.onload = () => {
+  createNotification(window.innerWidth / 2, window.innerHeight / 2);
+};
+</script>
 
-        const title = document.createElement('span');
-        title.textContent = 'New Notification';
-
-        const controls = document.createElement('div');
-        ['–', 'x'].forEach(label => {
-          const btn = document.createElement('button');
-          btn.textContent = label;
-          btn.onclick = (e) => {
-            e.stopPropagation();
-            // Spawn more notifications
-            for (let i = 0; i < 3; i++) {
-              const offsetX = Math.random() * window.innerWidth;
-              const offsetY = Math.random() * window.innerHeight;
-              createNotification(offsetX, offsetY);
-            }
-          };
-          controls.appendChild(btn);
-        });
-
-        header.appendChild(title);
-        header.appendChild(controls);
-
-        const content = document.createElement('div');
-        content.className = 'notif-content';
-        content.textContent = 'You have a new message!';
-
-        notif.appendChild(header);
-        notif.appendChild(content);
-        notif.onclick = (e) => {
-          e.stopPropagation();
-          for (let i = 0; i < 3; i++) {
-            const offsetX = Math.random() * window.innerWidth;
-            const offsetY = Math.random() * window.innerHeight;
-            createNotification(offsetX, offsetY);
-          }
-        };
-
-        document.body.appendChild(notif);
-      }
-
-      document.body.addEventListener('click', (e) => {
-        createNotification(e.clientX, e.clientY);
-      });
-    </script>
-
-  </body>
+</body>
 </html>
