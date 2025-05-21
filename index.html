@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Notifications</title>
+  <title>MacOS Desktop</title>
   <style>
     body {
       margin: 0;
@@ -155,37 +155,47 @@
   }
 
 function moveNotification(notif, platform) {
+  // Defer execution to ensure notif is rendered and sized
   requestAnimationFrame(() => {
-    let x = parseFloat(notif.style.left) || Math.random() * window.innerWidth;
-    let y = parseFloat(notif.style.top) || Math.random() * window.innerHeight;
-
+    // Force a layout reflow to ensure the element's size is known
     const width = notif.offsetWidth;
     const height = notif.offsetHeight;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
 
-    const count = clickCounts[platform] || 1;
-    const baseSpeed = 5 + count * 10; // base speed increases with more clicks
-    const speed = baseSpeed + Math.random() * 3;
+    // Place it randomly inside the screen bounds
+    let x = Math.random() * (screenW - width);
+    let y = Math.random() * (screenH - height);
+    notif.style.left = `${x}px`;
+    notif.style.top = `${y}px`;
 
-    const angleSpread = 2 * Math.PI + count * 0.2 * Math.PI; // angle range increases too
-    const angle = Math.random() * angleSpread;
+    // Set a constant velocity — random direction, but fixed speed
+    const speed = 2.5;
+    const angle = Math.random() * 2 * Math.PI;
+    let dx = Math.cos(angle) * speed;
+    let dy = Math.sin(angle) * speed;
 
-    let vx = Math.cos(angle) * speed;
-    let vy = Math.sin(angle) * speed;
-
+    // Animate
     function animate() {
-      const screenW = window.innerWidth;
-      const screenH = window.innerHeight;
+      x += dx;
+      y += dy;
 
-      x += vx;
-      y += vy;
-
-      if (x <= 0 || x + width >= screenW) {
-        vx *= -1;
-        x = Math.max(0, Math.min(x, screenW - width));
+      // Edge bouncing (left/right)
+      if (x <= 0) {
+        x = 0;
+        dx = Math.abs(dx);
+      } else if (x + width >= screenW) {
+        x = screenW - width;
+        dx = -Math.abs(dx);
       }
-      if (y <= 0 || y + height >= screenH) {
-        vy *= -1;
-        y = Math.max(0, Math.min(y, screenH - height));
+
+      // Edge bouncing (top/bottom)
+      if (y <= 0) {
+        y = 0;
+        dy = Math.abs(dy);
+      } else if (y + height >= screenH) {
+        y = screenH - height;
+        dy = -Math.abs(dy);
       }
 
       notif.style.left = `${x}px`;
@@ -197,6 +207,8 @@ function moveNotification(notif, platform) {
     requestAnimationFrame(animate);
   });
 }
+
+
   function createNotification(platform) {
     const message = generateMessage(platform);
     const notif = document.createElement('div');
