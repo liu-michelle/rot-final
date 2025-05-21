@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MacOS Desktop</title>
+  <title>My Desktop</title>
   <style>
     body {
       margin: 0;
@@ -25,7 +25,7 @@
       z-index: 1000;
       opacity: 0;
       transform: scale(0.9);
-      transition: opacity 0.3s ease, transform 0.3s ease, left 3s linear, top 3s linear;
+
     }
 
     .notification.show {
@@ -107,16 +107,122 @@
       transform: scale(1.1);
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     }
+    
+      #sticky-note {
+    position: fixed;
+    top: 500px;
+    right: 30px;
+    width: 200px;
+    min-height: 200px;
+    background: #fff9a9;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    cursor: move;
+    z-index: 999;
+    user-select: none;
+    white-space: pre-wrap;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+    
+      #calendar-container {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 999;
+  }
+
+  .calendar-header {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 32px);
+    gap: 6px;
+    text-align: center;
+  }
+
+  .calendar-day {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .calendar-date {
+    font-size: 14px;
+    padding: 4px;
+    border-radius: 6px;
+    cursor: default;
+  }
+
+  .calendar-date.today {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+  }
   </style>
 </head>
 <body>
 
-<!-- App icons -->
+
 <div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
 <div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
 <div class="app-icon" id="instagram-icon"><img src="instagram.png" alt="Instagram"></div>
+  <div id="sticky-note" contenteditable="true">
+  TODO list:<br>
+  • do laundry<br>
+  • brainrot final<br>
+  • econ presentation
+</div>
+  <div id="calendar-container"></div>
 
 <script>
+    function buildCalendar() {
+    const container = document.getElementById('calendar-container');
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const today = now.getDate();
+
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let html = `<div class="calendar-header">${monthNames[month]} ${year}</div>`;
+    html += '<div class="calendar-grid">';
+    daysOfWeek.forEach(d => {
+      html += `<div class="calendar-day">${d}</div>`;
+    });
+
+    for (let i = 0; i < firstDay; i++) {
+      html += `<div></div>`;
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const isToday = day === today ? 'today' : '';
+      html += `<div class="calendar-date ${isToday}">${day}</div>`;
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  window.addEventListener('DOMContentLoaded', buildCalendar);
   const csvData = {
     linkedin: [],
     pinterest: []
@@ -127,6 +233,33 @@
     pinterest: 0,
     instagram: 0
   };
+  
+    const stickyNote = document.getElementById('sticky-note');
+  let isDragging = false, offsetX = 0, offsetY = 0;
+
+  stickyNote.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - stickyNote.offsetLeft;
+    offsetY = e.clientY - stickyNote.offsetTop;
+    stickyNote.style.userSelect = 'none';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    stickyNote.style.left = `${e.clientX - offsetX}px`;
+    stickyNote.style.top = `${e.clientY - offsetY}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    stickyNote.style.userSelect = 'text';
+  });
+
+  stickyNote.addEventListener('dblclick', () => {
+    if (stickyNote.innerText.trim() === 'TODO') {
+      stickyNote.innerText = '';
+    }
+  });
 
   const instagramUsers = ['alex_likes_your_photo', 'sophia_123', 'techguru.ai', 'zenmode', 'catlover99', 'pixel.master'];
 
@@ -155,32 +288,29 @@
   }
 
 function moveNotification(notif, platform) {
-  // Defer execution to ensure notif is rendered and sized
   requestAnimationFrame(() => {
-    // Force a layout reflow to ensure the element's size is known
     const width = notif.offsetWidth;
     const height = notif.offsetHeight;
     const screenW = window.innerWidth;
     const screenH = window.innerHeight;
 
-    // Place it randomly inside the screen bounds
     let x = Math.random() * (screenW - width);
     let y = Math.random() * (screenH - height);
     notif.style.left = `${x}px`;
     notif.style.top = `${y}px`;
 
-    // Set a constant velocity — random direction, but fixed speed
-    const speed = 2.5;
+    const clickCount = clickCounts[platform] || 0;
+    const baseSpeed = 2.5;
+    const speed = Math.min(10, baseSpeed + clickCount * 0.5)
+
     const angle = Math.random() * 2 * Math.PI;
     let dx = Math.cos(angle) * speed;
     let dy = Math.sin(angle) * speed;
 
-    // Animate
     function animate() {
       x += dx;
       y += dy;
 
-      // Edge bouncing (left/right)
       if (x <= 0) {
         x = 0;
         dx = Math.abs(dx);
@@ -189,7 +319,6 @@ function moveNotification(notif, platform) {
         dx = -Math.abs(dx);
       }
 
-      // Edge bouncing (top/bottom)
       if (y <= 0) {
         y = 0;
         dy = Math.abs(dy);
@@ -207,7 +336,6 @@ function moveNotification(notif, platform) {
     requestAnimationFrame(animate);
   });
 }
-
 
   function createNotification(platform) {
     const message = generateMessage(platform);
