@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iOS-Style Notifications</title>
+  <title>Smart Notifications</title>
   <style>
     body {
       margin: 0;
@@ -25,7 +25,7 @@
       z-index: 1000;
       opacity: 0;
       transform: scale(0.9);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.3s ease, left 3s linear, top 3s linear;
     }
 
     .notification.show {
@@ -149,21 +149,31 @@
     return 'Notification';
   }
 
-  function createNotification(x, y, platform) {
+  function playSound(platform) {
+    const audio = new Audio(`${platform}.wav`);
+    audio.play().catch(() => {});
+  }
+
+  function moveNotification(notif) {
+    setInterval(() => {
+      notif.style.left = Math.random() * (window.innerWidth - 360) + "px";
+      notif.style.top = Math.random() * (window.innerHeight - 120) + "px";
+    }, 3000);
+  }
+
+  function createNotification(platform) {
     const message = generateMessage(platform);
     const notif = document.createElement('div');
     notif.className = 'notification';
-    notif.style.left = `${x}px`;
-    notif.style.top = `${y}px`;
+    notif.style.left = `${Math.random() * (window.innerWidth - 360)}px`;
+    notif.style.top = `${Math.random() * (window.innerHeight - 120)}px`;
 
-    // Icon
     const icon = document.createElement('div');
     icon.className = 'notification-icon';
     const img = document.createElement('img');
     img.src = `${platform}.png`;
     icon.appendChild(img);
 
-    // Body
     const body = document.createElement('div');
     body.className = 'notification-body';
 
@@ -183,6 +193,7 @@
       btn.onclick = (e) => {
         e.stopPropagation();
         spawnNotifications(platform);
+        playSound(platform);
       };
       controls.appendChild(btn);
     });
@@ -203,52 +214,43 @@
     notif.onclick = (e) => {
       e.stopPropagation();
       spawnNotifications(platform);
+      playSound(platform);
     };
 
     document.body.appendChild(notif);
     setTimeout(() => notif.classList.add('show'), 10);
+    moveNotification(notif);
   }
 
   function spawnNotifications(platform) {
     clickCounts[platform]++;
-    const count = Math.floor(Math.pow(2, clickCounts[platform]));
+    const count = clickCounts[platform] === 1 ? 1 : Math.pow(2, clickCounts[platform]);
     for (let i = 0; i < count; i++) {
-      const x = Math.random() * (window.innerWidth - 360);
-      const y = Math.random() * (window.innerHeight - 120);
-      createNotification(x, y, platform);
+      createNotification(platform);
     }
   }
 
-  // Click handlers
-  document.getElementById('linkedin-icon').addEventListener('click', () => {
-    if (csvData.linkedin.length === 0) {
-      fetch('linkedin.csv')
+  function fetchCSVAndSpawn(platform, url) {
+    if (csvData[platform].length === 0) {
+      fetch(url)
         .then(r => r.text())
         .then(csv => {
-          csvData.linkedin = csv.trim().split('\n').map(r => r.trim()).filter(Boolean);
-          spawnNotifications('linkedin');
+          csvData[platform] = csv.trim().split('\n').map(r => r.trim()).filter(Boolean);
+          spawnNotifications(platform);
+          playSound(platform);
         });
     } else {
-      spawnNotifications('linkedin');
+      spawnNotifications(platform);
+      playSound(platform);
     }
-  });
+  }
 
-  document.getElementById('pinterest-icon').addEventListener('click', () => {
-    if (csvData.pinterest.length === 0) {
-      fetch('pinterest.csv')
-        .then(r => r.text())
-        .then(csv => {
-          csvData.pinterest = csv.trim().split('\n').map(r => r.trim()).filter(Boolean);
-          spawnNotifications('pinterest');
-        });
-    } else {
-      spawnNotifications('pinterest');
-    }
-  });
-
-  document.getElementById('instagram-icon').addEventListener('click', () => {
+  document.getElementById('linkedin-icon').onclick = () => fetchCSVAndSpawn('linkedin', 'linkedin.csv');
+  document.getElementById('pinterest-icon').onclick = () => fetchCSVAndSpawn('pinterest', 'pinterest.csv');
+  document.getElementById('instagram-icon').onclick = () => {
     spawnNotifications('instagram');
-  });
+    playSound('instagram');
+  };
 </script>
 
 </body>
