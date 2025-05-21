@@ -154,18 +154,54 @@
     audio.play().catch(() => {});
   }
 
-  function moveNotification(notif) {
-    setInterval(() => {
-      notif.style.left = Math.random() * (window.innerWidth - 360) + "px";
-      notif.style.top = Math.random() * (window.innerHeight - 120) + "px";
-    }, 3000);
-  }
+function moveNotification(notif, platform) {
+  requestAnimationFrame(() => {
+    let x = parseFloat(notif.style.left) || Math.random() * window.innerWidth;
+    let y = parseFloat(notif.style.top) || Math.random() * window.innerHeight;
 
+    const width = notif.offsetWidth;
+    const height = notif.offsetHeight;
+
+    const count = clickCounts[platform] || 1;
+    const baseSpeed = 5 + count * 10; // base speed increases with more clicks
+    const speed = baseSpeed + Math.random() * 3;
+
+    const angleSpread = 2 * Math.PI + count * 0.2 * Math.PI; // angle range increases too
+    const angle = Math.random() * angleSpread;
+
+    let vx = Math.cos(angle) * speed;
+    let vy = Math.sin(angle) * speed;
+
+    function animate() {
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+
+      x += vx;
+      y += vy;
+
+      if (x <= 0 || x + width >= screenW) {
+        vx *= -1;
+        x = Math.max(0, Math.min(x, screenW - width));
+      }
+      if (y <= 0 || y + height >= screenH) {
+        vy *= -1;
+        y = Math.max(0, Math.min(y, screenH - height));
+      }
+
+      notif.style.left = `${x}px`;
+      notif.style.top = `${y}px`;
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  });
+}
   function createNotification(platform) {
     const message = generateMessage(platform);
     const notif = document.createElement('div');
     notif.className = 'notification';
-    notif.style.left = `${Math.random() * (window.innerWidth - 360)}px`;
+    notif.style.left = `${Math.random() * (window.innerWidth - 260)}px`;
     notif.style.top = `${Math.random() * (window.innerHeight - 120)}px`;
 
     const icon = document.createElement('div');
@@ -219,7 +255,7 @@
 
     document.body.appendChild(notif);
     setTimeout(() => notif.classList.add('show'), 10);
-    moveNotification(notif);
+    moveNotification(notif, platform);
   }
 
   function spawnNotifications(platform) {
