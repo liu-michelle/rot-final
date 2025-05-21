@@ -420,6 +420,12 @@ function moveNotification(notif, platform) {
       playSound(platform);
     }
   }
+/*
+  document.addEventListener('mousemove', function(e) {
+  if (e.clientY < 8) {
+    alert("Don't leave!");
+  }
+});*/
 
   document.getElementById('linkedin-icon').onclick = () => fetchCSVAndSpawn('linkedin', 'linkedin.csv');
   document.getElementById('pinterest-icon').onclick = () => fetchCSVAndSpawn('pinterest', 'pinterest.csv');
