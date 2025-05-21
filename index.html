@@ -3,101 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Notification Clicker</title>
+  <title>iOS-Style Notifications</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #e0e0e0 url('macos.jpg') no-repeat center center fixed;
+      background-size: cover;
       overflow: hidden;
-      position: relative;
-      background-image: url('macos.jpg');
     }
+
     .notification {
       position: absolute;
+      display: flex;
       width: 250px;
-      padding: 10px;
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      border-radius: 5px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
       z-index: 1000;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
-    .notif-header {
+
+    .notification.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .notification-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      margin-right: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .notification-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .notification-body {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      max-width: 220px;
+    }
+
+    .notification-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 5px;
+      align-items: center;
+      margin-bottom: 4px;
     }
-    .notif-header button {
+
+    .notification-app {
+      font-weight: bold;
+      font-size: 15px;
+      color: #111;
+    }
+
+    .notification-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .notification-controls button {
       border: none;
       background: none;
+      color: #999;
+      font-size: 16px;
       cursor: pointer;
-      font-size: 14px;
     }
-    .notif-content {
+
+    .notification-text {
       font-size: 14px;
       color: #333;
+    }
+
+    .app-icon {
+      position: fixed;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      z-index: 2000;
+    }
+
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+    }
+
+    #linkedin-icon { top: 20px; left: 20px; }
+    #pinterest-icon { top: 20px; left: 90px; }
+    #instagram-icon { top: 20px; left: 160px; }
+
+    .app-icon:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     }
   </style>
 </head>
 <body>
 
+<!-- App icons -->
+<div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
+<div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
+<div class="app-icon" id="instagram-icon"><img src="instagram.png" alt="Instagram"></div>
+
 <script>
-function createNotification(x, y) {
-  console.log('Creating notification at', x, y);
-  const notif = document.createElement('div');
-  notif.className = 'notification';
-  notif.style.left = `${x}px`;
-  notif.style.top = `${y}px`;
-
-  const header = document.createElement('div');
-  header.className = 'notif-header';
-
-  const title = document.createElement('span');
-  title.textContent = 'New Notification';
-
-  const controls = document.createElement('div');
-  ['–', 'x'].forEach(label => {
-    const btn = document.createElement('button');
-    btn.textContent = label;
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      for (let i = 0; i < 3; i++) {
-        const offsetX = Math.random() * window.innerWidth;
-        const offsetY = Math.random() * window.innerHeight;
-        createNotification(offsetX, offsetY);
-      }
-    };
-    controls.appendChild(btn);
-  });
-
-  header.appendChild(title);
-  header.appendChild(controls);
-
-  const content = document.createElement('div');
-  content.className = 'notif-content';
-  content.textContent = 'You have a new message!';
-
-  notif.appendChild(header);
-  notif.appendChild(content);
-  notif.onclick = (e) => {
-    e.stopPropagation();
-    for (let i = 0; i < 3; i++) {
-      const offsetX = Math.random() * window.innerWidth;
-      const offsetY = Math.random() * window.innerHeight;
-      createNotification(offsetX, offsetY);
-    }
+  const csvData = {
+    linkedin: [],
+    pinterest: []
   };
 
-  document.body.appendChild(notif);
-}
+  const clickCounts = {
+    linkedin: 0,
+    pinterest: 0,
+    instagram: 0
+  };
 
-document.body.addEventListener('click', (e) => {
-  createNotification(e.clientX, e.clientY);
-});
+  const instagramUsers = ['alex_likes_your_photo', 'sophia_123', 'techguru.ai', 'zenmode', 'catlover99', 'pixel.master'];
 
-window.onload = () => {
-  createNotification(window.innerWidth / 2, window.innerHeight / 2);
-};
+  function getRandomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+
+  function getRandomInstagramUser() {
+    return getRandomItem(instagramUsers);
+  }
+
+  function generateMessage(platform) {
+    if (platform === 'linkedin') {
+      return `🔔 New job alert: ${getRandomItem(csvData.linkedin)}`;
+    } else if (platform === 'pinterest') {
+      return `📌 Pin you might like: ${getRandomItem(csvData.pinterest)}`;
+    } else if (platform === 'instagram') {
+      return `${getRandomInstagramUser()} liked your post.`;
+    }
+    return 'Notification';
+  }
+
+  function createNotification(x, y, platform) {
+    const message = generateMessage(platform);
+    const notif = document.createElement('div');
+    notif.className = 'notification';
+    notif.style.left = `${x}px`;
+    notif.style.top = `${y}px`;
+
+    // Icon
+    const icon = document.createElement('div');
+    icon.className = 'notification-icon';
+    const img = document.createElement('img');
+    img.src = `${platform}.png`;
+    icon.appendChild(img);
+
+    // Body
+    const body = document.createElement('div');
+    body.className = 'notification-body';
+
+    const header = document.createElement('div');
+    header.className = 'notification-header';
+
+    const app = document.createElement('div');
+    app.className = 'notification-app';
+    app.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
+
+    const controls = document.createElement('div');
+    controls.className = 'notification-controls';
+
+    ['–', 'x'].forEach(symbol => {
+      const btn = document.createElement('button');
+      btn.textContent = symbol;
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        spawnNotifications(platform);
+      };
+      controls.appendChild(btn);
+    });
+
+    header.appendChild(app);
+    header.appendChild(controls);
+
+    const text = document.createElement('div');
+    text.className = 'notification-text';
+    text.textContent = message;
+
+    body.appendChild(header);
+    body.appendChild(text);
+
+    notif.appendChild(icon);
+    notif.appendChild(body);
+
+    notif.onclick = (e) => {
+      e.stopPropagation();
+      spawnNotifications(platform);
+    };
+
+    document.body.appendChild(notif);
+    setTimeout(() => notif.classList.add('show'), 10);
+  }
+
+  function spawnNotifications(platform) {
+    clickCounts[platform]++;
+    const count = Math.floor(Math.pow(2, clickCounts[platform]));
+    for (let i = 0; i < count; i++) {
+      const x = Math.random() * (window.innerWidth - 360);
+      const y = Math.random() * (window.innerHeight - 120);
+      createNotification(x, y, platform);
+    }
+  }
+
+  // Click handlers
+  document.getElementById('linkedin-icon').addEventListener('click', () => {
+    if (csvData.linkedin.length === 0) {
+      fetch('linkedin.csv')
+        .then(r => r.text())
+        .then(csv => {
+          csvData.linkedin = csv.trim().split('\n').map(r => r.trim()).filter(Boolean);
+          spawnNotifications('linkedin');
+        });
+    } else {
+      spawnNotifications('linkedin');
+    }
+  });
+
+  document.getElementById('pinterest-icon').addEventListener('click', () => {
+    if (csvData.pinterest.length === 0) {
+      fetch('pinterest.csv')
+        .then(r => r.text())
+        .then(csv => {
+          csvData.pinterest = csv.trim().split('\n').map(r => r.trim()).filter(Boolean);
+          spawnNotifications('pinterest');
+        });
+    } else {
+      spawnNotifications('pinterest');
+    }
+  });
+
+  document.getElementById('instagram-icon').addEventListener('click', () => {
+    spawnNotifications('instagram');
+  });
 </script>
 
 </body>
