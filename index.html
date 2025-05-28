@@ -221,8 +221,8 @@
   position: fixed;
   top: 120px;
   left: 120px;
-  width: 600px;
-  height: 400px;
+  width: 700px;
+  height: 500px;
   background: #1e1e1e;
   color: #d4d4d4;
   font-family: 'Courier New', monospace;
@@ -260,7 +260,7 @@
   top: 80px;
   left: 100px;
   width: 600px;
-  height: 800px;
+  height: 700px;
   background: white;
   border: 1px solid #0078d7;
   border-radius: 8px;
@@ -288,6 +288,29 @@
         const editor = document.getElementById('vscode-editor');
         editor.style.display = editor.style.display === 'none' ? 'block' : 'none';
       };
+      const vscodeEditor = document.getElementById('vscode-editor');
+      let isDraggingEditor = false,
+        offsetEditorX = 0,
+        offsetEditorY = 0;
+
+      vscodeEditor.addEventListener('mousedown', (e) => {
+        if (e.target !== vscodeEditor) return;
+        isDraggingEditor = true;
+        offsetEditorX = e.clientX - vscodeEditor.offsetLeft;
+        offsetEditorY = e.clientY - vscodeEditor.offsetTop;
+        vscodeEditor.style.userSelect = 'none';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDraggingEditor) return;
+        vscodeEditor.style.left = `${e.clientX - offsetEditorX}px`;
+        vscodeEditor.style.top = `${e.clientY - offsetEditorY}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingEditor = false;
+        vscodeEditor.style.userSelect = 'text';
+      });
 
       document.getElementById('word-icon').onclick = () => {
         const doc = document.getElementById('word-doc');
@@ -328,6 +351,31 @@
         html += '</div>';
         container.innerHTML = html;
       }
+
+      const wordDoc = document.getElementById('word-doc');
+      let isDraggingDoc = false,
+        offsetDocX = 0,
+        offsetDocY = 0;
+
+      wordDoc.addEventListener('mousedown', (e) => {
+        if (e.target !== wordDoc) return;
+        isDraggingDoc = true;
+        offsetDocX = e.clientX - wordDoc.offsetLeft;
+        offsetDocY = e.clientY - wordDoc.offsetTop;
+        wordDoc.style.userSelect = 'none';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDraggingDoc) return;
+        wordDoc.style.left = `${e.clientX - offsetDocX}px`;
+        wordDoc.style.top = `${e.clientY - offsetDocY}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingDoc = false;
+        wordDoc.style.userSelect = 'text';
+      });
+
 
       window.addEventListener('DOMContentLoaded', buildCalendar);
       const csvData = {
