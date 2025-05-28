@@ -1,501 +1,551 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Desktop</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #e0e0e0 url('macos.jpg') no-repeat center center fixed;
-      background-size: cover;
-      overflow: hidden;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Desktop</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #e0e0e0 url('macos.jpg') no-repeat center center fixed;
+        background-size: cover;
+        overflow: hidden;
+      }
 
-    .notification {
-      position: absolute;
-      display: flex;
-      width: 250px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.92);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(8px);
-      border-radius: 18px;
-      z-index: 1000;
-      opacity: 0;
-      transform: scale(0.9);
+      .notification {
+        position: absolute;
+        display: flex;
+        width: 250px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(8px);
+        border-radius: 18px;
+        z-index: 1000;
+        opacity: 0;
+        transform: scale(0.9);
 
-    }
+      }
 
-    .notification.show {
-      opacity: 1;
-      transform: scale(1);
-    }
+      .notification.show {
+        opacity: 1;
+        transform: scale(1);
+      }
 
-    .notification-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      margin-right: 12px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
+      .notification-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        margin-right: 12px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
 
-    .notification-icon img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+      .notification-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-    .notification-body {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      max-width: 220px;
-    }
+      .notification-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        max-width: 220px;
+      }
 
-    .notification-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
+      .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
 
-    .notification-app {
-      font-weight: bold;
-      font-size: 15px;
-      color: #111;
-    }
+      .notification-app {
+        font-weight: bold;
+        font-size: 15px;
+        color: #111;
+      }
 
-    .notification-controls {
-      display: flex;
-      gap: 6px;
-    }
+      .notification-controls {
+        display: flex;
+        gap: 6px;
+      }
 
-    .notification-controls button {
-      border: none;
-      background: none;
-      color: #999;
-      font-size: 16px;
-      cursor: pointer;
-    }
+      .notification-controls button {
+        border: none;
+        background: none;
+        color: #999;
+        font-size: 16px;
+        cursor: pointer;
+      }
 
-    .notification-text {
-      font-size: 14px;
-      color: #333;
-    }
+      .notification-text {
+        font-size: 14px;
+        color: #333;
+      }
 
-    .app-icon {
-      position: fixed;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      z-index: 2000;
-    }
+      .app-icon {
+        position: fixed;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        z-index: 2000;
+      }
 
-    .app-icon img {
-      width: 100%;
-      height: 100%;
-    }
+      .app-icon img {
+        width: 100%;
+        height: 100%;
+      }
 
-    #linkedin-icon { top: 20px; left: 20px; }
-    #pinterest-icon { top: 20px; left: 90px; }
-    #instagram-icon { top: 20px; left: 160px; }
-    #ppt-icon { top: 20px; left: 230px; }
-    #word-icon { top: 20px; left: 300px; }
-    #vscode-icon { top: 20px; left: 370px; }
+      #linkedin-icon {
+        top: 20px;
+        left: 20px;
+      }
 
-    .app-icon:hover {
-      transform: scale(1.1);
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    }
-    
+      #pinterest-icon {
+        top: 20px;
+        left: 90px;
+      }
+
+      #instagram-icon {
+        top: 20px;
+        left: 160px;
+      }
+
+      #ppt-icon {
+        top: 20px;
+        left: 230px;
+      }
+
+      #word-icon {
+        top: 20px;
+        left: 300px;
+      }
+
+      #vscode-icon {
+        top: 20px;
+        left: 370px;
+      }
+
+      .app-icon:hover {
+        transform: scale(1.1);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+
       #sticky-note {
-    position: fixed;
-    top: 500px;
-    right: 30px;
-    width: 200px;
-    min-height: 200px;
-    background: #fff9a9;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    border-radius: 8px;
-    padding: 12px;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 14px;
-    cursor: move;
-    z-index: 999;
-    user-select: none;
-    white-space: pre-wrap;
+        position: fixed;
+        top: 500px;
+        right: 30px;
+        width: 200px;
+        min-height: 200px;
+        background: #fff9a9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        padding: 12px;
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 14px;
+        cursor: move;
+        z-index: 999;
+        user-select: none;
+        white-space: pre-wrap;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
-    
+      }
+
       #calendar-container {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    font-family: 'Segoe UI', sans-serif;
-    z-index: 999;
-  }
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        font-family: 'Segoe UI', sans-serif;
+        z-index: 999;
+      }
 
-  .calendar-header {
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
+      .calendar-header {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
 
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 32px);
-    gap: 6px;
-    text-align: center;
-  }
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 32px);
+        gap: 6px;
+        text-align: center;
+      }
 
-  .calendar-day {
-    font-size: 12px;
-    color: #666;
-  }
+      .calendar-day {
+        font-size: 12px;
+        color: #666;
+      }
 
-  .calendar-date {
-    font-size: 14px;
-    padding: 4px;
-    border-radius: 6px;
-    cursor: default;
-  }
+      .calendar-date {
+        font-size: 14px;
+        padding: 4px;
+        border-radius: 6px;
+        cursor: default;
+      }
 
-  .calendar-date.today {
-    background: #007bff;
-    color: white;
-    font-weight: bold;
-  }
-    
-    #clock {
+      .calendar-date.today {
+        background: #007bff;
+        color: white;
+        font-weight: bold;
+      }
+
+      #clock {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        font-size: 18px;
+        font-family: 'Segoe UI', sans-serif;
+        padding: 10px 20px;
+        box-sizing: border-box;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+    </style>
+  </head>
+  <body>
+
+
+    <div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
+    <div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
+    <div class="app-icon" id="instagram-icon"><img src="instagram.png" alt="Instagram"></div>
+    <div class="app-icon" id="ppt-icon"><img src="ppt.png" alt="Powerpoint"></div>
+    <div class="app-icon" id="word-icon"><img src="word.png" alt="Word"></div>
+    <div class="app-icon" id="vscode-icon"><img src="vscode.png" alt="VSCode"></div>
+    <div id="sticky-note" contenteditable="true">
+      FINALS TODO LIST:<br>
+      • make MADD website <br>
+      • finish SOSC essay <br>
+      • practice econ presentation
+    </div>
+    <div id="calendar-container"></div>
+    <div id="clock"> </div>
+    <div id="word-doc" contenteditable="true" style="
+  display: none;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  font-size: 18px;
+  top: 80px;
+  left: 100px;
+  width: 600px;
+  height: 800px;
+  background: white;
+  border: 1px solid #0078d7;
+  border-radius: 8px;
+  padding: 16px;
   font-family: 'Segoe UI', sans-serif;
-  padding: 10px 20px;
-  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  overflow-y: auto;
   z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-    }
-  </style>
-</head>
-<body>
-
-
-<div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
-<div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
-<div class="app-icon" id="instagram-icon"><img src="instagram.png" alt="Instagram"></div>
-<div class="app-icon" id="ppt-icon"><img src="ppt.png" alt="Powerpoint"></div>
-<div class="app-icon" id="word-icon"><img src="word.png" alt="Word"></div>
-<div class="app-icon" id="vscode-icon"><img src="vscode.png" alt="VSCode"></div>
-  <div id="sticky-note" contenteditable="true">
-  FINALS TODO LIST:<br>
-  • MADD practice website <br>
-  • sosc essay <br>
-  • econ presentation
+">
+  <strong>SOSC 15200 Final Paper
+</strong><br><br>
+  In both Aristotle’s Politics and Machiavelli’s Prince, they discuss the purpose of government and the necessary qualities of the citizen and the ruler. The main political idea of Aristotle’s Politics is that the city and consequent government exist to provide a life for its citizens of the highest virtue and good. On the other hand, The Prince, focusing more on the qualities of the leader and his need for cruelty, details how to obtain and maintain power over a state, and how rulers and governments need to be proactive in many aspects, but is rather silent on the virtue and good of the ruled. We can better understand the differences in Aristotle and Machiavelli’s political ideologies if we take a look at their fundamental beliefs concerning human nature. We utilize the Oxford Language Dictionary’s definition of human nature as “the general psychological characteristics, feelings, and behavioral traits of humankind, regarded as shared by all humans,” and can begin the discussion on each thinker’s perception of human nature. 
+      <br><br>
+      First, touching on Aristotle’s and Machiavelli’s conceptions of human nature,
 </div>
-  <div id="calendar-container"></div>
-  <div id="clock">
-    
-  </div>
-<script>
-    function buildCalendar() {
-    const container = document.getElementById('calendar-container');
-    const year = 2025;
-    const month = 4;
-    const today = 28;
 
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
+    <script>
+      document.getElementById('word-icon').onclick = () => {
+  const doc = document.getElementById('word-doc');
+  doc.style.display = doc.style.display === 'none' ? 'block' : 'none';
+};
 
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      function buildCalendar() {
+        const container = document.getElementById('calendar-container');
+        const year = 2025;
+        const month = 4;
+        const today = 28;
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const monthNames = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
 
-    let html = `<div class="calendar-header">${monthNames[month]} ${year}</div>`;
-    html += '<div class="calendar-grid">';
-    daysOfWeek.forEach(d => {
-      html += `<div class="calendar-day">${d}</div>`;
-    });
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    for (let i = 0; i < firstDay; i++) {
-      html += `<div></div>`;
-    }
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const isToday = day === today ? 'today' : '';
-      html += `<div class="calendar-date ${isToday}">${day}</div>`;
-    }
+        let html = `<div class="calendar-header">${monthNames[month]} ${year}</div>`;
+        html += '<div class="calendar-grid">';
+        daysOfWeek.forEach(d => {
+          html += `<div class="calendar-day">${d}</div>`;
+        });
 
-    html += '</div>';
-    container.innerHTML = html;
-  }
+        for (let i = 0; i < firstDay; i++) {
+          html += `<div></div>`;
+        }
 
-  window.addEventListener('DOMContentLoaded', buildCalendar);
-  const csvData = {
-    linkedin: [],
-    pinterest: []
-  };
+        for (let day = 1; day <= daysInMonth; day++) {
+          const isToday = day === today ? 'today' : '';
+          html += `<div class="calendar-date ${isToday}">${day}</div>`;
+        }
 
-  const clickCounts = {
-    linkedin: 0,
-    pinterest: 0,
-    instagram: 0
-  };
-  
-    const stickyNote = document.getElementById('sticky-note');
-  let isDragging = false, offsetX = 0, offsetY = 0;
-
-  stickyNote.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    offsetX = e.clientX - stickyNote.offsetLeft;
-    offsetY = e.clientY - stickyNote.offsetTop;
-    stickyNote.style.userSelect = 'none';
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    stickyNote.style.left = `${e.clientX - offsetX}px`;
-    stickyNote.style.top = `${e.clientY - offsetY}px`;
-  });
-
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-    stickyNote.style.userSelect = 'text';
-  });
-
-  stickyNote.addEventListener('dblclick', () => {
-    if (stickyNote.innerText.trim() === 'TODO') {
-      stickyNote.innerText = '';
-    }
-  });
-
-  let instagramUsers = [];
-
-function fetchInstagramUsernames(url) {
-  fetch(url)
-    .then(r => r.text())
-    .then(csv => {
-      instagramUsers = csv
-        .trim()
-        .split('\n')
-        .map(name => name.trim())
-        .filter(Boolean);
-    });
-}
-
-fetchInstagramUsernames('instagram_usernames_list.csv');
-
-
-  function getRandomItem(array) {
-    return array[Math.floor(Math.random() * array.length)];
-  }
-
-  function shuffleString(str) {
-  const arr = str.split('');
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr.join('');
-}
-
-function getRandomInstagramUser() {
-  const user = getRandomItem(instagramUsers);
-  return user ? shuffleString(user) : 'anon_user';
-}
-
-
-  function generateMessage(platform) {
-    if (platform === 'linkedin') {
-      return `🔔 New job alert: ${getRandomItem(csvData.linkedin)}`;
-    } else if (platform === 'pinterest') {
-      return `📌 Pin you might like: ${getRandomItem(csvData.pinterest)}`;
-    } else if (platform === 'instagram') {
-      return `${getRandomInstagramUser()} liked your post.`;
-    }
-    return 'Notification';
-  }
-
-  function playSound(platform) {
-    const audio = new Audio(`${platform}.wav`);
-    audio.play().catch(() => {});
-  }
-
-function moveNotification(notif, platform) {
-  requestAnimationFrame(() => {
-    const width = notif.offsetWidth;
-    const height = notif.offsetHeight;
-    const screenW = window.innerWidth;
-    const screenH = window.innerHeight;
-
-    let x = Math.random() * (screenW - width);
-    let y = Math.random() * (screenH - height);
-    notif.style.left = `${x}px`;
-    notif.style.top = `${y}px`;
-
-    const clickCount = clickCounts[platform] || 0;
-    const baseSpeed = 2.5;
-    const speed = Math.min(10, baseSpeed + clickCount * 0.5)
-
-    const angle = Math.random() * 2 * Math.PI;
-    let dx = Math.cos(angle) * speed;
-    let dy = Math.sin(angle) * speed;
-
-    function animate() {
-      x += dx;
-      y += dy;
-
-      if (x <= 0) {
-        x = 0;
-        dx = Math.abs(dx);
-      } else if (x + width >= screenW) {
-        x = screenW - width;
-        dx = -Math.abs(dx);
+        html += '</div>';
+        container.innerHTML = html;
       }
 
-      if (y <= 0) {
-        y = 0;
-        dy = Math.abs(dy);
-      } else if (y + height >= screenH) {
-        y = screenH - height;
-        dy = -Math.abs(dy);
-      }
-
-      notif.style.left = `${x}px`;
-      notif.style.top = `${y}px`;
-
-      requestAnimationFrame(animate);
-    }
-
-    requestAnimationFrame(animate);
-  });
-}
-
-  function createNotification(platform) {
-    const message = generateMessage(platform);
-    const notif = document.createElement('div');
-    notif.className = 'notification';
-    notif.style.left = `${Math.random() * (window.innerWidth - 260)}px`;
-    notif.style.top = `${Math.random() * (window.innerHeight - 120)}px`;
-
-    const icon = document.createElement('div');
-    icon.className = 'notification-icon';
-    const img = document.createElement('img');
-    img.src = `${platform}.png`;
-    icon.appendChild(img);
-
-    const body = document.createElement('div');
-    body.className = 'notification-body';
-
-    const header = document.createElement('div');
-    header.className = 'notification-header';
-
-    const app = document.createElement('div');
-    app.className = 'notification-app';
-    app.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
-
-    const controls = document.createElement('div');
-    controls.className = 'notification-controls';
-
-    ['–', 'x'].forEach(symbol => {
-      const btn = document.createElement('button');
-      btn.textContent = symbol;
-      btn.onclick = (e) => {
-        e.stopPropagation();
-        spawnNotifications(platform);
-        playSound(platform);
+      window.addEventListener('DOMContentLoaded', buildCalendar);
+      const csvData = {
+        linkedin: [],
+        pinterest: []
       };
-      controls.appendChild(btn);
-    });
 
-    header.appendChild(app);
-    header.appendChild(controls);
+      const clickCounts = {
+        linkedin: 0,
+        pinterest: 0,
+        instagram: 0
+      };
 
-    const text = document.createElement('div');
-    text.className = 'notification-text';
-    text.textContent = message;
+      const stickyNote = document.getElementById('sticky-note');
+      let isDragging = false,
+        offsetX = 0,
+        offsetY = 0;
 
-    body.appendChild(header);
-    body.appendChild(text);
+      stickyNote.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - stickyNote.offsetLeft;
+        offsetY = e.clientY - stickyNote.offsetTop;
+        stickyNote.style.userSelect = 'none';
+      });
 
-    notif.appendChild(icon);
-    notif.appendChild(body);
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        stickyNote.style.left = `${e.clientX - offsetX}px`;
+        stickyNote.style.top = `${e.clientY - offsetY}px`;
+      });
 
-    notif.onclick = (e) => {
-      e.stopPropagation();
-      spawnNotifications(platform);
-      playSound(platform);
-    };
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        stickyNote.style.userSelect = 'text';
+      });
 
-    document.body.appendChild(notif);
-    setTimeout(() => notif.classList.add('show'), 10);
-    moveNotification(notif, platform);
-  }
+      stickyNote.addEventListener('dblclick', () => {
+        if (stickyNote.innerText.trim() === 'TODO') {
+          stickyNote.innerText = '';
+        }
+      });
 
-  function spawnNotifications(platform) {
-    clickCounts[platform]++;
-    const count = clickCounts[platform] === 1 ? 1 : Math.pow(2, clickCounts[platform]);
-    for (let i = 0; i < count; i++) {
-      createNotification(platform);
-    }
-  }
+      let instagramUsers = [];
 
-  function fetchCSVAndSpawn(platform, url) {
-    if (csvData[platform].length === 0) {
-      fetch(url)
-        .then(r => r.text())
-        .then(csv => {
-          csvData[platform] = csv.trim().split('\n').map(r => r.trim()).filter(Boolean);
+      function fetchInstagramUsernames(url) {
+        fetch(url)
+          .then(r => r.text())
+          .then(csv => {
+            instagramUsers = csv
+              .trim()
+              .split('\n')
+              .map(name => name.trim())
+              .filter(Boolean);
+          });
+      }
+
+      fetchInstagramUsernames('instagram_usernames_list.csv');
+
+
+      function getRandomItem(array) {
+        return array[Math.floor(Math.random() * array.length)];
+      }
+
+      function shuffleString(str) {
+        const arr = str.split('');
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr.join('');
+      }
+
+      function getRandomInstagramUser() {
+        const user = getRandomItem(instagramUsers);
+        return user ? shuffleString(user) : 'anon_user';
+      }
+
+
+      function generateMessage(platform) {
+        if (platform === 'linkedin') {
+          return `🔔 New job alert: ${getRandomItem(csvData.linkedin)}`;
+        } else if (platform === 'pinterest') {
+          return `📌 Pin you might like: ${getRandomItem(csvData.pinterest)}`;
+        } else if (platform === 'instagram') {
+          return `❤️ ${getRandomInstagramUser()} liked your post.`;
+        }
+        return 'Notification';
+      }
+
+      function playSound(platform) {
+        const audio = new Audio(`${platform}.wav`);
+        audio.play().catch(() => {});
+      }
+
+      function moveNotification(notif, platform) {
+        requestAnimationFrame(() => {
+          const width = notif.offsetWidth;
+          const height = notif.offsetHeight;
+          const screenW = window.innerWidth;
+          const screenH = window.innerHeight;
+
+          let x = Math.random() * (screenW - width);
+          let y = Math.random() * (screenH - height);
+          notif.style.left = `${x}px`;
+          notif.style.top = `${y}px`;
+
+          const clickCount = clickCounts[platform] || 0;
+          const baseSpeed = 2.5;
+          const speed = Math.min(10, baseSpeed + clickCount * 0.5)
+
+          const angle = Math.random() * 2 * Math.PI;
+          let dx = Math.cos(angle) * speed;
+          let dy = Math.sin(angle) * speed;
+
+          function animate() {
+            x += dx;
+            y += dy;
+
+            if (x <= 0) {
+              x = 0;
+              dx = Math.abs(dx);
+            } else if (x + width >= screenW) {
+              x = screenW - width;
+              dx = -Math.abs(dx);
+            }
+
+            if (y <= 0) {
+              y = 0;
+              dy = Math.abs(dy);
+            } else if (y + height >= screenH) {
+              y = screenH - height;
+              dy = -Math.abs(dy);
+            }
+
+            notif.style.left = `${x}px`;
+            notif.style.top = `${y}px`;
+
+            requestAnimationFrame(animate);
+          }
+
+          requestAnimationFrame(animate);
+        });
+      }
+
+      function createNotification(platform) {
+        const message = generateMessage(platform);
+        const notif = document.createElement('div');
+        notif.className = 'notification';
+        notif.style.left = `${Math.random() * (window.innerWidth - 260)}px`;
+        notif.style.top = `${Math.random() * (window.innerHeight - 120)}px`;
+
+        const icon = document.createElement('div');
+        icon.className = 'notification-icon';
+        const img = document.createElement('img');
+        img.src = `${platform}.png`;
+        icon.appendChild(img);
+
+        const body = document.createElement('div');
+        body.className = 'notification-body';
+
+        const header = document.createElement('div');
+        header.className = 'notification-header';
+
+        const app = document.createElement('div');
+        app.className = 'notification-app';
+        app.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
+
+        const controls = document.createElement('div');
+        controls.className = 'notification-controls';
+
+        ['–', 'x'].forEach(symbol => {
+          const btn = document.createElement('button');
+          btn.textContent = symbol;
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            spawnNotifications(platform);
+            playSound(platform);
+          };
+          controls.appendChild(btn);
+        });
+
+        header.appendChild(app);
+        header.appendChild(controls);
+
+        const text = document.createElement('div');
+        text.className = 'notification-text';
+        text.textContent = message;
+
+        body.appendChild(header);
+        body.appendChild(text);
+
+        notif.appendChild(icon);
+        notif.appendChild(body);
+
+        notif.onclick = (e) => {
+          e.stopPropagation();
           spawnNotifications(platform);
           playSound(platform);
-        });
-    } else {
-      spawnNotifications(platform);
-      playSound(platform);
-    }
-  }
-/*
-  document.addEventListener('mousemove', function(e) {
-  if (e.clientY < 8) {
-    alert("Don't leave!");
-  }
-});*/
+        };
 
-  document.getElementById('linkedin-icon').onclick = () => fetchCSVAndSpawn('linkedin', 'linkedin.csv');
-  document.getElementById('pinterest-icon').onclick = () => fetchCSVAndSpawn('pinterest', 'pinterest.csv');
-  document.getElementById('instagram-icon').onclick = () => {
-    spawnNotifications('instagram');
-    playSound('instagram');
-  };
-  
-  function updateClock() {
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const seconds = now.getSeconds().toString().padStart(2, '0');
-  document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-}
-setInterval(updateClock, 1000);
-updateClock(); // initial call
+        document.body.appendChild(notif);
+        setTimeout(() => notif.classList.add('show'), 10);
+        moveNotification(notif, platform);
+      }
 
-</script>
+      function spawnNotifications(platform) {
+        clickCounts[platform]++;
+        const count = clickCounts[platform] === 1 ? 1 : Math.pow(2, clickCounts[platform]);
+        for (let i = 0; i < count; i++) {
+          createNotification(platform);
+        }
+      }
 
-</body>
+      function fetchCSVAndSpawn(platform, url) {
+        if (csvData[platform].length === 0) {
+          fetch(url)
+            .then(r => r.text())
+            .then(csv => {
+              csvData[platform] = csv.trim().split('\n').map(r => r.trim()).filter(Boolean);
+              spawnNotifications(platform);
+              playSound(platform);
+            });
+        } else {
+          spawnNotifications(platform);
+          playSound(platform);
+        }
+      }
+      /*
+        document.addEventListener('mousemove', function(e) {
+        if (e.clientY < 8) {
+          alert("Don't leave!");
+        }
+      });*/
+
+      document.getElementById('linkedin-icon').onclick = () => fetchCSVAndSpawn('linkedin', 'linkedin.csv');
+      document.getElementById('pinterest-icon').onclick = () => fetchCSVAndSpawn('pinterest', 'pinterest.csv');
+      document.getElementById('instagram-icon').onclick = () => {
+        spawnNotifications('instagram');
+        playSound('instagram');
+      };
+
+      function updateClock() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        document.getElementById('clock').textContent = ` ⏰${hours}:${minutes}:${seconds}`;
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+    </script>
+
+  </body>
 </html>
