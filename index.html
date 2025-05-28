@@ -172,6 +172,24 @@
     color: white;
     font-weight: bold;
   }
+    
+    #clock {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 18px;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+    }
   </style>
 </head>
 <body>
@@ -190,14 +208,15 @@
   • econ presentation
 </div>
   <div id="calendar-container"></div>
-
+  <div id="clock">
+    
+  </div>
 <script>
     function buildCalendar() {
     const container = document.getElementById('calendar-container');
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const today = now.getDate();
+    const year = 2025;
+    const month = 4;
+    const today = 28;
 
     const monthNames = [
       'January', 'February', 'March', 'April', 'May', 'June',
@@ -465,6 +484,17 @@ function moveNotification(notif, platform) {
     spawnNotifications('instagram');
     playSound('instagram');
   };
+  
+  function updateClock() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateClock, 1000);
+updateClock(); // initial call
+
 </script>
 
 </body>
