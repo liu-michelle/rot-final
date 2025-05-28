@@ -216,7 +216,29 @@
     </style>
   </head>
   <body>
-
+    <div id="vscode-editor" contenteditable="true" style="
+  display: none;
+  position: fixed;
+  top: 120px;
+  left: 120px;
+  width: 600px;
+  height: 400px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  border: 2px solid #007acc;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  overflow-y: auto;
+  white-space: pre;
+  z-index: 1000;
+">
+      <span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">helloWorld</span>() {
+      <span style="color: #9cdcfe;">console</span>.log(<span style="color: #ce9178;">"Hello, VSCode!"</span>);
+      }
+    </div>
 
     <div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
     <div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
@@ -248,9 +270,9 @@
   overflow-y: auto;
   z-index: 999;
 ">
-  <strong>SOSC 15200 Final Paper
-</strong><br><br>
-  Both Aristotle’s <i>Politics</i> and Machiavelli’s <i>The Prince</i> discuss the purpose of government and the necessary qualities of the citizen and the ruler. The main political idea of Aristotle’s <i>Politics</i> is that the city and consequent government exist to provide a life for its citizens of the highest virtue and good. On the other hand, <i>The Prince</i>, focusing on the qualities of the leader and his need for cruelty, details how to obtain and maintain power over a state, and how rulers and governments need to be proactive in many aspects. To better understand the differences in Aristotle and Machiavelli’s political ideologies, we take a look at their fundamental beliefs concerning human nature. We utilize the Oxford Language Dictionary’s definition of human nature as “the general psychological characteristics, feelings, and behavioral traits of humankind, regarded as shared by all humans,” and begin the discussion on each thinker’s perception of human nature. 
+      <strong>SOSC 15200 Final Paper
+      </strong><br><br>
+      Both Aristotle’s <i>Politics</i> and Machiavelli’s <i>The Prince</i> discuss the purpose of government and the necessary qualities of the citizen and the ruler. The main political idea of Aristotle’s <i>Politics</i> is that the city and consequent government exist to provide a life for its citizens of the highest virtue and good. On the other hand, <i>The Prince</i>, focusing on the qualities of the leader and his need for cruelty, details how to obtain and maintain power over a state, and how rulers and governments need to be proactive in many aspects. To better understand the differences in Aristotle and Machiavelli’s political ideologies, we take a look at their fundamental beliefs concerning human nature. We utilize the Oxford Language Dictionary’s definition of human nature as “the general psychological characteristics, feelings, and behavioral traits of humankind, regarded as shared by all humans,” and begin the discussion on each thinker’s perception of human nature.
       <br><br>
       First, touching on Aristotle’s and Machiavelli’s conceptions of human nature, ... [explain further, cite text!]
       <br><br><br>
@@ -259,13 +281,18 @@
       paragraph 3: rulers and crime in Machiavelli's <i>The Prince</i>
       <br><br><br>
       conclusion paragraph
-</div>
+    </div>
 
     <script>
+      document.getElementById('vscode-icon').onclick = () => {
+        const editor = document.getElementById('vscode-editor');
+        editor.style.display = editor.style.display === 'none' ? 'block' : 'none';
+      };
+
       document.getElementById('word-icon').onclick = () => {
-  const doc = document.getElementById('word-doc');
-  doc.style.display = doc.style.display === 'none' ? 'block' : 'none';
-};
+        const doc = document.getElementById('word-doc');
+        doc.style.display = doc.style.display === 'none' ? 'block' : 'none';
+      };
 
       function buildCalendar() {
         const container = document.getElementById('calendar-container');
