@@ -267,15 +267,41 @@
     }
   });
 
-  const instagramUsers = ['_', '_', '_', '_', '_', '_'];
+  let instagramUsers = [];
+
+function fetchInstagramUsernames(url) {
+  fetch(url)
+    .then(r => r.text())
+    .then(csv => {
+      instagramUsers = csv
+        .trim()
+        .split('\n')
+        .map(name => name.trim())
+        .filter(Boolean);
+    });
+}
+
+fetchInstagramUsernames('instagram_usernames_list.csv');
+
 
   function getRandomItem(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
 
-  function getRandomInstagramUser() {
-    return getRandomItem(instagramUsers);
+  function shuffleString(str) {
+  const arr = str.split('');
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
+  return arr.join('');
+}
+
+function getRandomInstagramUser() {
+  const user = getRandomItem(instagramUsers);
+  return user ? shuffleString(user) : 'anon_user';
+}
+
 
   function generateMessage(platform) {
     if (platform === 'linkedin') {
