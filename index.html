@@ -324,6 +324,7 @@
 <span style="color:#569cd6;">&lt;/html&gt;</span>
 </div>
 
+    
     <div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
     <div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
     <div class="app-icon" id="instagram-icon"><img src="instagram.png" alt="Instagram"></div>
@@ -366,6 +367,24 @@
       <br><br><br>
       conclusion paragraph
     </div>
+    
+    <div id="pdf-viewer" style="
+  display: none;
+  position: fixed;
+  top: 100px;
+  left: 100px;
+  width: 800px;
+  height: 600px;
+  background: white;
+  border: 2px solid #d24726;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  overflow: hidden;
+  z-index: 1000;
+">
+  <iframe src="slides.pdf" width="100%" height="100%" style="border: none;"></iframe>
+</div>
+
 
     <script>
       //code & event listeners for vscode icon
@@ -426,6 +445,33 @@
         isDraggingDoc = false;
         wordDoc.style.userSelect = 'text';
       });
+
+      //code for powerpoint and event listeners
+      document.getElementById('ppt-icon').onclick = () => {
+  const viewer = document.getElementById('pdf-viewer');
+  viewer.style.display = viewer.style.display === 'none' ? 'block' : 'none';
+};
+const pdfViewer = document.getElementById('pdf-viewer');
+let isDraggingPDF = false, offsetPDFX = 0, offsetPDFY = 0;
+
+pdfViewer.addEventListener('mousedown', (e) => {
+  if (e.target.tagName === 'IFRAME') return;
+  isDraggingPDF = true;
+  offsetPDFX = e.clientX - pdfViewer.offsetLeft;
+  offsetPDFY = e.clientY - pdfViewer.offsetTop;
+  pdfViewer.style.userSelect = 'none';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDraggingPDF) return;
+  pdfViewer.style.left = `${e.clientX - offsetPDFX}px`;
+  pdfViewer.style.top = `${e.clientY - offsetPDFY}px`;
+});
+
+document.addEventListener('mouseup', () => {
+  isDraggingPDF = false;
+  pdfViewer.style.userSelect = 'auto';
+});
 
       //making the calendar widget 
       function buildCalendar() {
