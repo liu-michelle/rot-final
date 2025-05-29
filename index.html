@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Desktop</title>
+    <title>My Desktop 💻</title>
     <style>
       body {
         margin: 0;
@@ -284,6 +284,7 @@
     </div>
 
     <script>
+      //code & event listeners for vscode icon
       document.getElementById('vscode-icon').onclick = () => {
         const editor = document.getElementById('vscode-editor');
         editor.style.display = editor.style.display === 'none' ? 'block' : 'none';
@@ -311,12 +312,38 @@
         isDraggingEditor = false;
         vscodeEditor.style.userSelect = 'text';
       });
-
+      
+      //code & event listeners for MSword icon
       document.getElementById('word-icon').onclick = () => {
         const doc = document.getElementById('word-doc');
         doc.style.display = doc.style.display === 'none' ? 'block' : 'none';
       };
+            //make MSword draggable
+      const wordDoc = document.getElementById('word-doc');
+      let isDraggingDoc = false,
+        offsetDocX = 0,
+        offsetDocY = 0;
 
+      wordDoc.addEventListener('mousedown', (e) => {
+        if (e.target !== wordDoc) return;
+        isDraggingDoc = true;
+        offsetDocX = e.clientX - wordDoc.offsetLeft;
+        offsetDocY = e.clientY - wordDoc.offsetTop;
+        wordDoc.style.userSelect = 'none';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDraggingDoc) return;
+        wordDoc.style.left = `${e.clientX - offsetDocX}px`;
+        wordDoc.style.top = `${e.clientY - offsetDocY}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingDoc = false;
+        wordDoc.style.userSelect = 'text';
+      });
+
+      //making the calendar widget 
       function buildCalendar() {
         const container = document.getElementById('calendar-container');
         const year = 2025;
@@ -352,31 +379,6 @@
         container.innerHTML = html;
       }
 
-      const wordDoc = document.getElementById('word-doc');
-      let isDraggingDoc = false,
-        offsetDocX = 0,
-        offsetDocY = 0;
-
-      wordDoc.addEventListener('mousedown', (e) => {
-        if (e.target !== wordDoc) return;
-        isDraggingDoc = true;
-        offsetDocX = e.clientX - wordDoc.offsetLeft;
-        offsetDocY = e.clientY - wordDoc.offsetTop;
-        wordDoc.style.userSelect = 'none';
-      });
-
-      document.addEventListener('mousemove', (e) => {
-        if (!isDraggingDoc) return;
-        wordDoc.style.left = `${e.clientX - offsetDocX}px`;
-        wordDoc.style.top = `${e.clientY - offsetDocY}px`;
-      });
-
-      document.addEventListener('mouseup', () => {
-        isDraggingDoc = false;
-        wordDoc.style.userSelect = 'text';
-      });
-
-
       window.addEventListener('DOMContentLoaded', buildCalendar);
       const csvData = {
         linkedin: [],
@@ -389,6 +391,7 @@
         instagram: 0
       };
 
+      //creating the sticky note and its interaction
       const stickyNote = document.getElementById('sticky-note');
       let isDragging = false,
         offsetX = 0,
@@ -418,6 +421,7 @@
         }
       });
 
+      //getting a random instagram user from data downloads
       let instagramUsers = [];
 
       function fetchInstagramUsernames(url) {
@@ -439,6 +443,7 @@
         return array[Math.floor(Math.random() * array.length)];
       }
 
+      //shuffling the instagram username for privacy
       function shuffleString(str) {
         const arr = str.split('');
         for (let i = arr.length - 1; i > 0; i--) {
@@ -454,6 +459,7 @@
       }
 
 
+      //creating messages of 3 types: either linkedin, pinterest, or instagram
       function generateMessage(platform) {
         if (platform === 'linkedin') {
           return `🔔 New job alert: ${getRandomItem(csvData.linkedin)}`;
@@ -465,11 +471,13 @@
         return 'Notification';
       }
 
+      //play a ding notification sound based on the type of notification
       function playSound(platform) {
         const audio = new Audio(`${platform}.wav`);
         audio.play().catch(() => {});
       }
 
+      //giving each notification a ball bouncing movement, so it bounces off the edges of the screen
       function moveNotification(notif, platform) {
         requestAnimationFrame(() => {
           const width = notif.offsetWidth;
@@ -520,6 +528,7 @@
         });
       }
 
+      //creating the styling of each notification
       function createNotification(platform) {
         const message = generateMessage(platform);
         const notif = document.createElement('div');
@@ -581,6 +590,7 @@
         moveNotification(notif, platform);
       }
 
+      //increasing notifications exponentially based on number of previous clicks
       function spawnNotifications(platform) {
         clickCounts[platform]++;
         const count = clickCounts[platform] === 1 ? 1 : Math.pow(2, clickCounts[platform]);
@@ -589,6 +599,7 @@
         }
       }
 
+      //fetching csvs with data download 
       function fetchCSVAndSpawn(platform, url) {
         if (csvData[platform].length === 0) {
           fetch(url)
@@ -603,13 +614,8 @@
           playSound(platform);
         }
       }
-      /*
-        document.addEventListener('mousemove', function(e) {
-        if (e.clientY < 8) {
-          alert("Don't leave!");
-        }
-      });*/
-
+      
+      //creating notifications from clicks
       document.getElementById('linkedin-icon').onclick = () => fetchCSVAndSpawn('linkedin', 'linkedin.csv');
       document.getElementById('pinterest-icon').onclick = () => fetchCSVAndSpawn('pinterest', 'pinterest.csv');
       document.getElementById('instagram-icon').onclick = () => {
@@ -617,6 +623,7 @@
         playSound('instagram');
       };
 
+      //updating the time to be accurate
       function updateClock() {
         const now = new Date();
         const hours = now.getHours().toString().padStart(2, '0');
