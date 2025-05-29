@@ -216,7 +216,8 @@
     </style>
   </head>
   <body>
-    <div id="vscode-editor" contenteditable="true" style="
+      <!-- i asked chatGPT to turn my code into a little vscode file -->
+<div id="vscode-editor" contenteditable="true" style="
   display: none;
   position: fixed;
   top: 120px;
@@ -235,10 +236,93 @@
   white-space: pre;
   z-index: 1000;
 ">
-      <span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">helloWorld</span>() {
-      <span style="color: #9cdcfe;">console</span>.log(<span style="color: #ce9178;">"Hello, VSCode!"</span>);
-      }
-    </div>
+<span style="color:#d4d4d4;">&lt;!DOCTYPE html&gt;</span>
+<span style="color:#569cd6;">&lt;html</span> <span style="color:#9cdcfe;">lang</span>=<span style="color:#ce9178;">"en"</span><span style="color:#569cd6;">&gt;</span>
+<span style="color:#569cd6;">&lt;head&gt;</span>
+  <span style="color:#569cd6;">&lt;meta</span> <span style="color:#9cdcfe;">charset</span>=<span style="color:#ce9178;">"UTF-8"</span><span style="color:#569cd6;">/&gt;</span>
+  <span style="color:#569cd6;">&lt;meta</span> <span style="color:#9cdcfe;">name</span>=<span style="color:#ce9178;">"viewport"</span> <span style="color:#9cdcfe;">content</span>=<span style="color:#ce9178;">"width=device-width, initial-scale=1.0"</span><span style="color:#569cd6;">/&gt;</span>
+  <span style="color:#569cd6;">&lt;title&gt;</span>My Desktop 💻<span style="color:#569cd6;">&lt;/title&gt;</span>
+  <span style="color:#569cd6;">&lt;style&gt;</span>
+    body {
+      margin: 0;
+      background: url('macos.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    .icon {
+      width: 50px;
+      height: 50px;
+      position: fixed;
+      top: 20px;
+      cursor: pointer;
+    }
+    #linkedin { left: 20px; }
+    #instagram { left: 90px; }
+    #note {
+      position: fixed;
+      right: 30px;
+      bottom: 80px;
+      width: 200px;
+      min-height: 150px;
+      background: #fff9a9;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    #clock {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .notif {
+      position: absolute;
+      background: white;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      max-width: 220px;
+      z-index: 999;
+      font-size: 14px;
+    }
+  <span style="color:#569cd6;">&lt;/style&gt;</span>
+<span style="color:#569cd6;">&lt;/head&gt;</span>
+<span style="color:#569cd6;">&lt;body&gt;</span>
+  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"linkedin"</span> <span style="color:#9cdcfe;">class</span>=<span style="color:#ce9178;">"icon"</span><span style="color:#569cd6;">&gt;</span>&lt;img src="linkedin.png" width="100%"&gt;<span style="color:#569cd6;">&lt;/div&gt;</span>
+  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"instagram"</span> <span style="color:#9cdcfe;">class</span>=<span style="color:#ce9178;">"icon"</span><span style="color:#569cd6;">&gt;</span>&lt;img src="instagram.png" width="100%"&gt;<span style="color:#569cd6;">&lt;/div&gt;</span>
+  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"note"</span> <span style="color:#9cdcfe;">contenteditable</span>=<span style="color:#ce9178;">"true"</span><span style="color:#569cd6;">&gt;</span>TODO List...<span style="color:#569cd6;">&lt;/div&gt;</span>
+  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"clock"</span><span style="color:#569cd6;">&gt;&lt;/div&gt;</span>
+  <span style="color:#569cd6;">&lt;script&gt;</span>
+    const clock = document.getElementById('clock');
+    setInterval(() => {
+      const now = new Date();
+      clock.textContent = `🕰️ ${now.toLocaleTimeString()}`;
+    }, 1000);
+
+    function notify(msg) {
+      const n = document.createElement('div');
+      n.className = 'notif';
+      n.textContent = msg;
+      n.style.left = Math.random() * (window.innerWidth - 240) + 'px';
+      n.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+      document.body.appendChild(n);
+      setTimeout(() => n.remove(), 5000);
+    }
+
+    document.getElementById('linkedin').onclick = () => notify("🔔 LinkedIn Alert!");
+    document.getElementById('instagram').onclick = () => notify("❤️ Someone liked your post!");
+  <span style="color:#569cd6;">&lt;/script&gt;</span>
+<span style="color:#569cd6;">&lt;/body&gt;</span>
+<span style="color:#569cd6;">&lt;/html&gt;</span>
+</div>
 
     <div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
     <div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
