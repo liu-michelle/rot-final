@@ -317,8 +317,8 @@
       setTimeout(() => n.remove(), 5000);
     }
 
-    document.getElementById('linkedin').onclick = () => notify("🔔 LinkedIn Alert!");
-    document.getElementById('instagram').onclick = () => notify("❤️ Someone liked your post!");
+    document.getElementById('linkedin').onclick = () => notify("linkedin notif");
+    document.getElementById('instagram').onclick = () => notify("insta notif");
   <span style="color:#569cd6;">&lt;/script&gt;</span>
 <span style="color:#569cd6;">&lt;/body&gt;</span>
 <span style="color:#569cd6;">&lt;/html&gt;</span>
@@ -385,7 +385,6 @@
   <iframe src="slides.pdf" width="100%" height="100%" style="border: none;"></iframe>
 
 </div>
-      <iframe width="500" height="500" src="https://youtu.be/mL4by3D5708?si=QhsFHJPzyCB2m0Cp?autoplay=1" allow="autoplay"></iframe>
 
     <script>
       //code & event listeners for vscode icon
@@ -608,57 +607,67 @@ document.addEventListener('mouseup', () => {
         audio.play().catch(() => {});
       }
 
-      //giving each notification a ball bouncing movement, so it bounces off the edges of the screen
-      function moveNotification(notif, platform) {
-        requestAnimationFrame(() => {
-          const width = notif.offsetWidth;
-          const height = notif.offsetHeight;
-          const screenW = window.innerWidth;
-          const screenH = window.innerHeight;
+      let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
 
-          let x = Math.random() * (screenW - width);
-          let y = Math.random() * (screenH - height);
-          notif.style.left = `${x}px`;
-          notif.style.top = `${y}px`;
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
 
-          const clickCount = clickCounts[platform] || 0;
-          const baseSpeed = 2.5;
-          const speed = Math.min(10, baseSpeed + clickCount * 0.5)
+      //giving each notification a ball bouncing movement, so it bounces off the edges of the screen. the notification move styles switch between flocking towards the user's mouse and this bouncing style.
+function moveNotification(notif, platform) {
+  let x = Math.random() * (window.innerWidth - notif.offsetWidth);
+  let y = Math.random() * (window.innerHeight - notif.offsetHeight);
+  let dx = 0, dy = 0;
+  let mode = 'flock';
+  let hasStartedBouncing = false;
+  let bounceStartTime = null;
 
-          const angle = Math.random() * 2 * Math.PI;
-          let dx = Math.cos(angle) * speed;
-          let dy = Math.sin(angle) * speed;
+  notif.style.left = `${x}px`;
+  notif.style.top = `${y}px`;
 
-          function animate() {
-            x += dx;
-            y += dy;
+  function animate() {
+    const rect = notif.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
-            if (x <= 0) {
-              x = 0;
-              dx = Math.abs(dx);
-            } else if (x + width >= screenW) {
-              x = screenW - width;
-              dx = -Math.abs(dx);
-            }
+    if (mode === 'flock') {
+      const dist = Math.hypot(mouseX - centerX, mouseY - centerY);
+      const angle = Math.atan2(mouseY - centerY, mouseX - centerX);
+      dx = Math.cos(angle) * 2.5;
+      dy = Math.sin(angle) * 2.5;
 
-            if (y <= 0) {
-              y = 0;
-              dy = Math.abs(dy);
-            } else if (y + height >= screenH) {
-              y = screenH - height;
-              dy = -Math.abs(dy);
-            }
+      x += dx;
+      y += dy;
 
-            notif.style.left = `${x}px`;
-            notif.style.top = `${y}px`;
-
-            requestAnimationFrame(animate);
-          }
-
-          requestAnimationFrame(animate);
-        });
+      if (dist < 20) {
+        mode = 'bounce';
+        bounceStartTime = Date.now();
+        dx = Math.random() * 4 - 2;
+        dy = Math.random() * 4 - 2;
       }
+    } else if (mode === 'bounce') {
+      x += dx;
+      y += dy;
 
+      if (x <= 0 || x + notif.offsetWidth >= window.innerWidth) dx *= -1;
+      if (y <= 0 || y + notif.offsetHeight >= window.innerHeight) dy *= -1;
+
+      if (Date.now() - bounceStartTime > 15000) {
+        notif.remove();
+        return;
+      }
+    }
+
+    notif.style.left = `${x}px`;
+    notif.style.top = `${y}px`;
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
       //creating the styling of each notification
       function createNotification(platform) {
         const message = generateMessage(platform);
