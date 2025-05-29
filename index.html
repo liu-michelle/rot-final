@@ -230,14 +230,14 @@
         display: flex;
         gap: 12px;
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateX(-10px);
         transition: opacity 0.3s ease, transform 0.3s ease;
         z-index: 10000;
       }
 
       .text-notif.show {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
       }
 
       .text-avatar {
@@ -446,20 +446,26 @@
 
     <script>
       //for text message notifications
-      const contacts = ['sydney', 'monica', 'krista', 'will', 'Nicholas', 'mimi', "Kathy", "Kathy","43426", "Augusta", "Dad", "Mom"];
+      const contacts = ['sydney', 'monica', 'crystal', 'will', 'Nicholas', "Kathy", "Kathy", "43426",  "Dad", "Mom", "monica", "monica", "will", "sydney", "Nicholas", "Kathy", "crystal", "Dad"];
       const messages = [
-        "r u coming to crerar?? i got us a table!",
+        "HELP",
         "what time do u wanna do dinner tonight?",
         "r u gonna do genocide in undertale..",
         "r u free Sunday in the day by any chance ?",
         "Okay my part is complete should we just send it?",
-        "oke lmk i havent bought my ticket",
         "What do we say for this",
         "We gave u empirical strategy, conclusion, and future extensions slide",
         "GEICO: Your verification code is: F3139F. It expires in 10 minutes. Please do not share this code with anyone or reply to this message.",
-        "STOP YOURE JOKING ",
         "You have 1 final and 2 projects?",
-        "我可以告诉她"
+        "我可以告诉她",
+        "im so hungry...",
+        "and hows ur paper goingv",
+        "LETS GO",
+        "wait do u get off work at 3",
+        "kathy we are sitting in the back",
+        "where should we meet?",
+        "interesting..",
+        "Dad will look at your docs soon"
       ];
 
       //randomly selecting a contact name and a message
@@ -470,6 +476,8 @@
         popupText(sender, message);
         const audio = new Audio('text-ding.mp3');
         audio.play().catch(() => {})
+        contacts.splice(randValue, 1);
+        messages.splice(randValue, 1);
       }
 
       //displaying all of the css elements necessary for the text elements
@@ -507,13 +515,15 @@
       }
 
       //random timing for the text messages
-      function schedule() {
-        const delay = Math.random() * 10000 + 3000;
-        setTimeout(() => {
-          makeText();
-          schedule();
-        }, delay);
-      }
+    function schedule() {
+      if (contacts.length === 0 || messages.length === 0) return;
+      const delay = Math.random() * 15000 + 10000;
+      setTimeout(() => {
+        makeText();
+        schedule();
+      }, delay);
+    }
+
 
       //intiial call
       schedule();
