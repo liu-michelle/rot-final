@@ -621,7 +621,6 @@ function moveNotification(notif, platform) {
   let y = Math.random() * (window.innerHeight - notif.offsetHeight);
   let dx = 0, dy = 0;
   let mode = 'flock';
-  let hasStartedBouncing = false;
   let bounceStartTime = null;
 
   notif.style.left = `${x}px`;
@@ -647,6 +646,7 @@ function moveNotification(notif, platform) {
         dx = Math.random() * 4 - 2;
         dy = Math.random() * 4 - 2;
       }
+
     } else if (mode === 'bounce') {
       x += dx;
       y += dy;
@@ -655,8 +655,7 @@ function moveNotification(notif, platform) {
       if (y <= 0 || y + notif.offsetHeight >= window.innerHeight) dy *= -1;
 
       if (Date.now() - bounceStartTime > 15000) {
-        notif.remove();
-        return;
+        mode = 'flock';
       }
     }
 
