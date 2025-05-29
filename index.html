@@ -155,7 +155,7 @@
 
       #calendar-container {
         position: fixed;
-        top: 30px;
+        top: 100px;
         right: 30px;
         background: rgba(255, 255, 255, 0.95);
         border-radius: 12px;
@@ -213,11 +213,70 @@
         align-items: center;
         justify-content: flex-end;
       }
+
+      .text-notif {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 300px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 18px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        font-family: 'Segoe UI', sans-serif;
+        color: #000;
+        display: flex;
+        gap: 12px;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 10000;
+      }
+
+      .text-notif.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .text-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgb(128, 128, 128);
+        color: white;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .text-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .text-name {
+        font-weight: bold;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+
+      .text-message {
+        font-size: 14px;
+        color: #333;
+        word-break: break-word;
+      }
     </style>
   </head>
   <body>
-      <!-- i asked chatGPT to turn my code into a little vscode file -->
-<div id="vscode-editor" contenteditable="true" style="
+    <!-- i asked chatGPT to turn my code into a little vscode file -->
+    <div id="vscode-editor" contenteditable="true" style="
   display: none;
   position: fixed;
   top: 120px;
@@ -236,30 +295,30 @@
   white-space: pre;
   z-index: 1000;
 ">
-<span style="color:#d4d4d4;">&lt;!DOCTYPE html&gt;</span>
-<span style="color:#569cd6;">&lt;html</span> <span style="color:#9cdcfe;">lang</span>=<span style="color:#ce9178;">"en"</span><span style="color:#569cd6;">&gt;</span>
-<span style="color:#569cd6;">&lt;head&gt;</span>
-  <span style="color:#569cd6;">&lt;meta</span> <span style="color:#9cdcfe;">charset</span>=<span style="color:#ce9178;">"UTF-8"</span><span style="color:#569cd6;">/&gt;</span>
-  <span style="color:#569cd6;">&lt;meta</span> <span style="color:#9cdcfe;">name</span>=<span style="color:#ce9178;">"viewport"</span> <span style="color:#9cdcfe;">content</span>=<span style="color:#ce9178;">"width=device-width, initial-scale=1.0"</span><span style="color:#569cd6;">/&gt;</span>
-  <span style="color:#569cd6;">&lt;title&gt;</span>My Desktop 💻<span style="color:#569cd6;">&lt;/title&gt;</span>
-  <span style="color:#569cd6;">&lt;style&gt;</span>
-    body {
+      <span style="color:#d4d4d4;">&lt;!DOCTYPE html&gt;</span>
+      <span style="color:#569cd6;">&lt;html</span> <span style="color:#9cdcfe;">lang</span>=<span style="color:#ce9178;">"en"</span><span style="color:#569cd6;">&gt;</span>
+      <span style="color:#569cd6;">&lt;head&gt;</span>
+      <span style="color:#569cd6;">&lt;meta</span> <span style="color:#9cdcfe;">charset</span>=<span style="color:#ce9178;">"UTF-8"</span><span style="color:#569cd6;">/&gt;</span>
+      <span style="color:#569cd6;">&lt;meta</span> <span style="color:#9cdcfe;">name</span>=<span style="color:#ce9178;">"viewport"</span> <span style="color:#9cdcfe;">content</span>=<span style="color:#ce9178;">"width=device-width, initial-scale=1.0"</span><span style="color:#569cd6;">/&gt;</span>
+      <span style="color:#569cd6;">&lt;title&gt;</span>My Desktop 💻<span style="color:#569cd6;">&lt;/title&gt;</span>
+      <span style="color:#569cd6;">&lt;style&gt;</span>
+      body {
       margin: 0;
       background: url('macos.jpg') no-repeat center center fixed;
       background-size: cover;
       font-family: sans-serif;
       overflow: hidden;
-    }
-    .icon {
+      }
+      .icon {
       width: 50px;
       height: 50px;
       position: fixed;
       top: 20px;
       cursor: pointer;
-    }
-    #linkedin { left: 20px; }
-    #instagram { left: 90px; }
-    #note {
+      }
+      #linkedin { left: 20px; }
+      #instagram { left: 90px; }
+      #note {
       position: fixed;
       right: 30px;
       bottom: 80px;
@@ -269,8 +328,8 @@
       padding: 10px;
       border-radius: 8px;
       font-size: 14px;
-    }
-    #clock {
+      }
+      #clock {
       position: fixed;
       bottom: 0;
       width: 100%;
@@ -282,8 +341,8 @@
       align-items: center;
       padding: 0 20px;
       box-sizing: border-box;
-    }
-    .notif {
+      }
+      .notif {
       position: absolute;
       background: white;
       padding: 10px;
@@ -292,22 +351,22 @@
       max-width: 220px;
       z-index: 999;
       font-size: 14px;
-    }
-  <span style="color:#569cd6;">&lt;/style&gt;</span>
-<span style="color:#569cd6;">&lt;/head&gt;</span>
-<span style="color:#569cd6;">&lt;body&gt;</span>
-  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"linkedin"</span> <span style="color:#9cdcfe;">class</span>=<span style="color:#ce9178;">"icon"</span><span style="color:#569cd6;">&gt;</span>&lt;img src="linkedin.png" width="100%"&gt;<span style="color:#569cd6;">&lt;/div&gt;</span>
-  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"instagram"</span> <span style="color:#9cdcfe;">class</span>=<span style="color:#ce9178;">"icon"</span><span style="color:#569cd6;">&gt;</span>&lt;img src="instagram.png" width="100%"&gt;<span style="color:#569cd6;">&lt;/div&gt;</span>
-  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"note"</span> <span style="color:#9cdcfe;">contenteditable</span>=<span style="color:#ce9178;">"true"</span><span style="color:#569cd6;">&gt;</span>TODO List...<span style="color:#569cd6;">&lt;/div&gt;</span>
-  <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"clock"</span><span style="color:#569cd6;">&gt;&lt;/div&gt;</span>
-  <span style="color:#569cd6;">&lt;script&gt;</span>
-    const clock = document.getElementById('clock');
-    setInterval(() => {
+      }
+      <span style="color:#569cd6;">&lt;/style&gt;</span>
+      <span style="color:#569cd6;">&lt;/head&gt;</span>
+      <span style="color:#569cd6;">&lt;body&gt;</span>
+      <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"linkedin"</span> <span style="color:#9cdcfe;">class</span>=<span style="color:#ce9178;">"icon"</span><span style="color:#569cd6;">&gt;</span>&lt;img src="linkedin.png" width="100%"&gt;<span style="color:#569cd6;">&lt;/div&gt;</span>
+      <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"instagram"</span> <span style="color:#9cdcfe;">class</span>=<span style="color:#ce9178;">"icon"</span><span style="color:#569cd6;">&gt;</span>&lt;img src="instagram.png" width="100%"&gt;<span style="color:#569cd6;">&lt;/div&gt;</span>
+      <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"note"</span> <span style="color:#9cdcfe;">contenteditable</span>=<span style="color:#ce9178;">"true"</span><span style="color:#569cd6;">&gt;</span>TODO List...<span style="color:#569cd6;">&lt;/div&gt;</span>
+      <span style="color:#569cd6;">&lt;div</span> <span style="color:#9cdcfe;">id</span>=<span style="color:#ce9178;">"clock"</span><span style="color:#569cd6;">&gt;&lt;/div&gt;</span>
+      <span style="color:#569cd6;">&lt;script&gt;</span>
+      const clock = document.getElementById('clock');
+      setInterval(() => {
       const now = new Date();
       clock.textContent = `🕰️ ${now.toLocaleTimeString()}`;
-    }, 1000);
+      }, 1000);
 
-    function notify(msg) {
+      function notify(msg) {
       const n = document.createElement('div');
       n.className = 'notif';
       n.textContent = msg;
@@ -315,16 +374,16 @@
       n.style.top = Math.random() * (window.innerHeight - 100) + 'px';
       document.body.appendChild(n);
       setTimeout(() => n.remove(), 5000);
-    }
+      }
 
-    document.getElementById('linkedin').onclick = () => notify("linkedin notif");
-    document.getElementById('instagram').onclick = () => notify("insta notif");
-  <span style="color:#569cd6;">&lt;/script&gt;</span>
-<span style="color:#569cd6;">&lt;/body&gt;</span>
-<span style="color:#569cd6;">&lt;/html&gt;</span>
-</div>
+      document.getElementById('linkedin').onclick = () => notify("linkedin notif");
+      document.getElementById('instagram').onclick = () => notify("insta notif");
+      <span style="color:#569cd6;">&lt;/script&gt;</span>
+      <span style="color:#569cd6;">&lt;/body&gt;</span>
+      <span style="color:#569cd6;">&lt;/html&gt;</span>
+    </div>
 
-    
+
     <div class="app-icon" id="linkedin-icon"><img src="linkedin.png" alt="LinkedIn"></div>
     <div class="app-icon" id="pinterest-icon"><img src="pinterest.png" alt="Pinterest"></div>
     <div class="app-icon" id="instagram-icon"><img src="instagram.png" alt="Instagram"></div>
@@ -367,7 +426,7 @@
       <br><br><br>
       conclusion paragraph
     </div>
-    
+
     <div id="pdf-viewer" style="
   display: none;
   position: fixed;
@@ -382,11 +441,83 @@
   overflow: hidden;
   z-index: 1000;
 ">
-  <iframe src="slides.pdf" width="100%" height="100%" style="border: none;"></iframe>
-
-</div>
+      <!--   <iframe src="slides.pdf" width="100%" height="100%" style="border: none;"></iframe> -->
+    </div>
 
     <script>
+      //for text message notifications
+      const contacts = ['sydney', 'monica', 'krista', 'will', 'Nicholas', 'mimi', "Kathy", "Kathy","43426", "Augusta", "Dad", "Mom"];
+      const messages = [
+        "r u coming to crerar?? i got us a table!",
+        "what time do u wanna do dinner tonight?",
+        "r u gonna do genocide in undertale..",
+        "r u free Sunday in the day by any chance ?",
+        "Okay my part is complete should we just send it?",
+        "oke lmk i havent bought my ticket",
+        "What do we say for this",
+        "We gave u empirical strategy, conclusion, and future extensions slide",
+        "GEICO: Your verification code is: F3139F. It expires in 10 minutes. Please do not share this code with anyone or reply to this message.",
+        "STOP YOURE JOKING ",
+        "You have 1 final and 2 projects?",
+        "我可以告诉她"
+      ];
+
+      //randomly selecting a contact name and a message
+      function makeText() {
+        randValue = Math.floor(Math.random() * contacts.length);
+        const sender = contacts[randValue];
+        const message = messages[randValue];
+        popupText(sender, message);
+        const audio = new Audio('text-ding.mp3');
+        audio.play().catch(() => {})
+      }
+
+      //displaying all of the css elements necessary for the text elements
+      function popupText(senderName, message) {
+        const notif = document.createElement('div');
+        notif.className = 'text-notif';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'text-avatar';
+        avatar.textContent = senderName.charAt(0).toUpperCase();
+
+        const body = document.createElement('div');
+        body.className = 'text-body';
+
+        const name = document.createElement('div');
+        name.className = 'text-name';
+        name.textContent = senderName;
+
+        const text = document.createElement('div');
+        text.className = 'text-message';
+        text.textContent = message;
+
+        body.appendChild(name);
+        body.appendChild(text);
+        notif.appendChild(avatar);
+        notif.appendChild(body);
+
+        document.body.appendChild(notif);
+        requestAnimationFrame(() => notif.classList.add('show'));
+
+        setTimeout(() => {
+          notif.classList.remove('show');
+          setTimeout(() => notif.remove(), 300);
+        }, 3000);
+      }
+
+      //random timing for the text messages
+      function schedule() {
+        const delay = Math.random() * 10000 + 3000;
+        setTimeout(() => {
+          makeText();
+          schedule();
+        }, delay);
+      }
+
+      //intiial call
+      schedule();
+
       //code & event listeners for vscode icon
       document.getElementById('vscode-icon').onclick = () => {
         const editor = document.getElementById('vscode-editor');
@@ -415,13 +546,13 @@
         isDraggingEditor = false;
         vscodeEditor.style.userSelect = 'text';
       });
-      
+
       //code & event listeners for MSword icon
       document.getElementById('word-icon').onclick = () => {
         const doc = document.getElementById('word-doc');
         doc.style.display = doc.style.display === 'none' ? 'block' : 'none';
       };
-            //make MSword draggable
+      //make MSword draggable
       const wordDoc = document.getElementById('word-doc');
       let isDraggingDoc = false,
         offsetDocX = 0,
@@ -448,30 +579,32 @@
 
       //code for powerpoint and event listeners
       document.getElementById('ppt-icon').onclick = () => {
-  const viewer = document.getElementById('pdf-viewer');
-  viewer.style.display = viewer.style.display === 'none' ? 'block' : 'none';
-};
-const pdfViewer = document.getElementById('pdf-viewer');
-let isDraggingPDF = false, offsetPDFX = 0, offsetPDFY = 0;
+        const viewer = document.getElementById('pdf-viewer');
+        viewer.style.display = viewer.style.display === 'none' ? 'block' : 'none';
+      };
+      const pdfViewer = document.getElementById('pdf-viewer');
+      let isDraggingPDF = false,
+        offsetPDFX = 0,
+        offsetPDFY = 0;
 
-pdfViewer.addEventListener('mousedown', (e) => {
-  if (e.target.tagName === 'IFRAME') return;
-  isDraggingPDF = true;
-  offsetPDFX = e.clientX - pdfViewer.offsetLeft;
-  offsetPDFY = e.clientY - pdfViewer.offsetTop;
-  pdfViewer.style.userSelect = 'none';
-});
+      pdfViewer.addEventListener('mousedown', (e) => {
+        if (e.target.tagName === 'IFRAME') return;
+        isDraggingPDF = true;
+        offsetPDFX = e.clientX - pdfViewer.offsetLeft;
+        offsetPDFY = e.clientY - pdfViewer.offsetTop;
+        pdfViewer.style.userSelect = 'none';
+      });
 
-document.addEventListener('mousemove', (e) => {
-  if (!isDraggingPDF) return;
-  pdfViewer.style.left = `${e.clientX - offsetPDFX}px`;
-  pdfViewer.style.top = `${e.clientY - offsetPDFY}px`;
-});
+      document.addEventListener('mousemove', (e) => {
+        if (!isDraggingPDF) return;
+        pdfViewer.style.left = `${e.clientX - offsetPDFX}px`;
+        pdfViewer.style.top = `${e.clientY - offsetPDFY}px`;
+      });
 
-document.addEventListener('mouseup', () => {
-  isDraggingPDF = false;
-  pdfViewer.style.userSelect = 'auto';
-});
+      document.addEventListener('mouseup', () => {
+        isDraggingPDF = false;
+        pdfViewer.style.userSelect = 'auto';
+      });
 
       //making the calendar widget 
       function buildCalendar() {
@@ -608,65 +741,66 @@ document.addEventListener('mouseup', () => {
       }
 
       let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
+      let mouseY = window.innerHeight / 2;
 
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
 
       //giving each notification a ball bouncing movement, so it bounces off the edges of the screen. the notification move styles switch between flocking towards the user's mouse and this bouncing style.
-function moveNotification(notif, platform) {
-  let x = Math.random() * (window.innerWidth - notif.offsetWidth);
-  let y = Math.random() * (window.innerHeight - notif.offsetHeight);
-  let dx = 0, dy = 0;
-  let mode = 'flock';
-  let bounceStartTime = null;
+      function moveNotification(notif, platform) {
+        let x = Math.random() * (window.innerWidth - notif.offsetWidth);
+        let y = Math.random() * (window.innerHeight - notif.offsetHeight);
+        let dx = 0,
+          dy = 0;
+        let mode = 'flock';
+        let bounceStartTime = null;
 
-  notif.style.left = `${x}px`;
-  notif.style.top = `${y}px`;
+        notif.style.left = `${x}px`;
+        notif.style.top = `${y}px`;
 
-  function animate() {
-    const rect = notif.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+        function animate() {
+          const rect = notif.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
 
-    if (mode === 'flock') {
-      const dist = Math.hypot(mouseX - centerX, mouseY - centerY);
-      const angle = Math.atan2(mouseY - centerY, mouseX - centerX);
-      dx = Math.cos(angle) * 2.5;
-      dy = Math.sin(angle) * 2.5;
+          if (mode === 'flock') {
+            const dist = Math.hypot(mouseX - centerX, mouseY - centerY);
+            const angle = Math.atan2(mouseY - centerY, mouseX - centerX);
+            dx = Math.cos(angle) * 2.5;
+            dy = Math.sin(angle) * 2.5;
 
-      x += dx;
-      y += dy;
+            x += dx;
+            y += dy;
 
-      if (dist < 20) {
-        mode = 'bounce';
-        bounceStartTime = Date.now();
-        dx = Math.random() * 4 - 2;
-        dy = Math.random() * 4 - 2;
+            if (dist < 20) {
+              mode = 'bounce';
+              bounceStartTime = Date.now();
+              dx = Math.random() * 4 - 2;
+              dy = Math.random() * 4 - 2;
+            }
+
+          } else if (mode === 'bounce') {
+            x += dx;
+            y += dy;
+
+            if (x <= 0 || x + notif.offsetWidth >= window.innerWidth) dx *= -1;
+            if (y <= 0 || y + notif.offsetHeight >= window.innerHeight) dy *= -1;
+
+            if (Date.now() - bounceStartTime > 15000) {
+              mode = 'flock';
+            }
+          }
+
+          notif.style.left = `${x}px`;
+          notif.style.top = `${y}px`;
+
+          requestAnimationFrame(animate);
+        }
+
+        animate();
       }
-
-    } else if (mode === 'bounce') {
-      x += dx;
-      y += dy;
-
-      if (x <= 0 || x + notif.offsetWidth >= window.innerWidth) dx *= -1;
-      if (y <= 0 || y + notif.offsetHeight >= window.innerHeight) dy *= -1;
-
-      if (Date.now() - bounceStartTime > 15000) {
-        mode = 'flock';
-      }
-    }
-
-    notif.style.left = `${x}px`;
-    notif.style.top = `${y}px`;
-
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-}
       //creating the styling of each notification
       function createNotification(platform) {
         const message = generateMessage(platform);
@@ -753,7 +887,7 @@ function moveNotification(notif, platform) {
           playSound(platform);
         }
       }
-      
+
       //creating notifications from clicks
       document.getElementById('linkedin-icon').onclick = () => fetchCSVAndSpawn('linkedin', 'linkedin.csv');
       document.getElementById('pinterest-icon').onclick = () => fetchCSVAndSpawn('pinterest', 'pinterest.csv');
